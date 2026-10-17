@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emotiedagboek</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--tx:#2b2a28;--mu:#7a766e;--bd:#e3dfd6;--ac:#4f7f6f;--acbg:#e2efe9;--box-sizing:border-box;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1d1b;--card:#282826;--tx:#ecebe6;--mu:#a09c93;--bd:#3d3c38;--ac:#7fb5a3;--acbg:#2c403a}}
+:root[data-theme="dark"]{--bg:#1d1d1b;--card:#282826;--tx:#ecebe6;--mu:#a09c93;--bd:#3d3c38;--ac:#7fb5a3;--acbg:#2c403a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px 16px 48px}
+h1{font-size:22px;margin:8px 0 2px}h2{font-size:17px;margin:22px 0 4px}
+.sub{color:var(--mu);font-size:14px;margin:0 0 12px}
+nav{display:flex;gap:6px;margin:12px 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:6px 0;z-index:2}
+nav button{flex:1;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font:inherit;font-size:15px}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:10px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{padding:8px 13px;border:1px solid var(--bd);border-radius:20px;background:var(--bg);color:var(--tx);font:inherit;font-size:15px}
+.chip.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.fam{font-weight:600;margin-top:14px}.fam small{display:block;font-weight:400;color:var(--mu);font-size:13px}
+textarea{width:100%;min-height:64px;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;resize:vertical}
+label{display:block;font-weight:600;margin:14px 0 4px}label small{font-weight:400;color:var(--mu)}
+input[type=range]{width:100%;accent-color:var(--ac)}
+.row{display:flex;justify-content:space-between;color:var(--mu);font-size:13px}
+.main{width:100%;padding:14px;border:0;border-radius:12px;background:var(--ac);color:#fff;font:inherit;font-weight:600;margin-top:16px}
+.ghost{padding:9px 14px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font:inherit;font-size:14px;margin:4px 6px 0 0}
+.tag{display:inline-block;background:var(--acbg);color:var(--tx);border-radius:12px;padding:2px 10px;font-size:13px;margin:2px 4px 2px 0}
+.day{color:var(--mu);font-size:13px;text-transform:uppercase;letter-spacing:.04em;margin:20px 0 4px}
+.meta{color:var(--mu);font-size:13px}.q{margin:6px 0 0;font-size:15px}
+.bar{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:14px}.bar span:first-child{width:110px}
+.bar i{display:block;height:10px;background:var(--ac);border-radius:5px}
+.hint{font-size:13px;color:var(--mu);margin-top:26px;border-top:1px solid var(--bd);padding-top:12px}
+.ok{color:var(--ac);font-weight:600;text-align:center;margin-top:10px}
+.hide{display:none}
+nav button{padding:10px 4px;font-size:14px}
+details{border-top:1px solid var(--bd);padding:8px 0}summary{font-weight:600;cursor:pointer}details p,.adv p{margin:6px 0;font-size:15px}.adv{border-left:4px solid var(--ac)}ul,ol{padding-left:20px;margin:6px 0;font-size:15px}
+#qin{flex:1;padding:9px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;font-size:15px;min-width:0}
+.act{margin:8px 0;font-size:15px}.act .ghost{margin:4px 6px 0 0;padding:6px 10px}.ghost.sel{background:var(--ac);color:#fff;border-color:var(--ac)}
+#custact{flex:1;padding:9px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;font-size:15px;min-width:0}
+</style>
+</head>
+<body>
+<main>
+<h1>Emotiedagboek en hulpwijzer</h1>
+<p class="sub">Een paar keer per dag even stilstaan: wat voel ik, en waar in mijn lijf?</p>
+<nav>
+<button id="t0" class="on">Invullen</button><button id="t1">Dagboek</button><button id="t2">Overzicht</button><button id="t3">Wijzer</button>
+</nav>
+
+<section id="v0">
+<div id="adv"></div>
+<div class="card">
+<label style="margin-top:0">1. Wat merk ik in mijn lichaam? <small>(meerdere mogelijk)</small></label>
+<div class="chips" id="body"></div>
+
+<label>2. Waar zit ik nu? <small>(twee vragen helpen: hoeveel energie voel ik in mijn lijf, en voelt het prettig of vervelend?)</small></label>
+<div id="emo"></div>
+
+<label>3. Hoe sterk is het? <b id="iv">5</b>/10</label>
+<input type="range" id="int" min="0" max="10" value="5">
+<div class="row"><span>nauwelijks</span><span>overweldigend</span></div>
+
+<label>4. Hoe is mijn energie? <b id="ev">5</b>/10</label>
+<input type="range" id="en" min="0" max="10" value="5">
+<div class="row"><span>leeg</span><span>vol energie</span></div>
+
+<label>5. Wat gebeurde er? <small>(optioneel)</small></label>
+<textarea id="sit" placeholder="Bijv. een appje gekregen, alleen thuis, vergadering..."></textarea>
+<label>6. Wat ging er door mijn hoofd? <small>(optioneel)</small></label>
+<textarea id="ged" placeholder="Bijv. 'ik doe het niet goed'"></textarea>
+<label>7. Wat heb ik nu nodig? <small>(optioneel: tik aan wat past, of schrijf het zelf op)</small></label>
+<p class="sub" id="needhint"></p><div class="chips" id="needs" style="margin-bottom:8px"></div>
+<textarea id="nodig" placeholder="Eigen woorden (optioneel): wat heb ik nodig?"></textarea>
+<label>8. Wat kan ik doen? <small>(kies wat je wilt proberen; achteraf geef je in het Dagboek aan of het hielp)</small></label>
+<p class="sub" id="acthint"></p>
+<div class="chips" id="acts"></div>
+<div style="display:flex;gap:8px;margin-top:10px"><input id="custact" type="text" placeholder="Eigen idee toevoegen"><button class="ghost" id="addact" style="margin:0">Toevoegen</button></div>
+<label style="display:flex;gap:10px;align-items:center;font-weight:400;margin-top:16px"><input type="checkbox" id="bespreek" style="width:20px;height:20px"> Dit wil ik bespreken met mijn therapeut</label>
+<button class="main" id="save">Opslaan</button>
+<div id="msg" class="ok hide">Opgeslagen ✓</div>
+</div>
+</section>
+
+<section id="v1" class="hide">
+<div id="list"></div>
+<div class="card">
+<b>Delen met je therapeut</b>
+<p class="sub">Maak een tekst van de afgelopen 7 dagen om te kopiëren of voor te lezen.</p>
+<button class="ghost" id="exp">Maak samenvatting</button><button class="ghost" id="cp">Kopieer</button>
+<textarea id="out" class="hide" style="min-height:200px;margin-top:8px" readonly></textarea>
+</div>
+</section>
+
+<section id="v2" class="hide">
+<div id="ins"></div>
+</section>
+<section id="v3" class="hide"><div id="wijzer"></div></section>
+
+<p class="hint">Je notities blijven alleen op dit apparaat, in deze browser. Wis je browserdata, dan verdwijnen ze. Gebruik daarom af en toe de samenvatting om te bewaren.<br><br>Gaat het niet goed en heb je gedachten aan zelfmoord? Praat erover: in Nederland bel of chat je gratis met 113 (0800-0113), in België met 1813.</p>
+</main>
+<script>
+var FAM=[
+["Verdriet","gemis, verlies, iets wat je pijn doet",["Verdrietig","Eenzaam","Teleurgesteld","Gekwetst","Hopeloos","Moedeloos","Verlangend"]],
+["Angst & spanning","je lijf staat 'aan', iets voelt onveilig of onzeker",["Gespannen","Bang","Bezorgd","Onrustig","Onzeker","Overweldigd","Paniek"]],
+["Boosheid","een grens is overschreden of iets is niet eerlijk",["Geïrriteerd","Boos","Gefrustreerd","Machteloos","Jaloers","Verbitterd"]],
+["Schaamte & schuld","je oordeelt over jezelf",["Beschaamd","Schuldig","Waardeloos","Een mislukkeling","Teleurgesteld in mezelf"]],
+["Leeg & moe","weinig voelen is ook een gevoel",["Moe","Leeg","Afgestompt","Lusteloos","Verdoofd","Onverschillig"]],
+["Prettig","ook kleine lichtpuntjes tellen",["Rustig","Tevreden","Opgelucht","Dankbaar","Hoopvol","Blij","Trots","Verbonden"]]];
+var BODY=["Strakke borst","Knoop in maag","Gespannen schouders","Snelle hartslag","Zwaar gevoel","Moe","Trillerig","Misselijk","Hoofdpijn","Warm","Koud","Leeg gevoel","Brok in keel","Rustige ademhaling","Ontspannen","Doodmoe maar onrustig"];
+var KEY="emotiedagboek:entries",E=[],selB={},selE={},selA={},CUSTOM=[];
+var ACT={
+"Verdriet":["Praten met iemand die ik vertrouw","Mezelf laten huilen","Muziek luisteren","Warme douche of thee","Iemand een berichtje sturen"],
+"Angst & spanning":["Rustig ademhalen (4 tellen in, 6 uit)","Even naar buiten lopen","5 dingen om me heen benoemen","Schouders en kaken losmaken","Opschrijven waar ik me zorgen over maak"],
+"Boosheid":["Even weg uit de situatie","Bewegen of wandelen","Opschrijven wat me dwarszit","Later het gesprek aangaan"],
+"Schaamte & schuld":["Zeggen wat ik tegen een vriend zou zeggen","Aan iemand vertellen wat er speelt","De gedachte opschrijven en bekijken"],
+"Leeg & moe":["Een glas water drinken","Rusten zonder schuldgevoel","Frisse lucht","Iets kleins eten","Contact zoeken met iemand"],
+"Prettig":["Dit moment even vastleggen","Delen met iemand","Opschrijven waar ik dankbaar voor ben"],
+"Algemeen":["Niets doen en het gevoel er laten zijn","Hulp vragen aan mijn therapeut"]};
+function load(){try{E=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){E=[]}}
+function store(){try{localStorage.setItem(KEY,JSON.stringify(E));return true}catch(e){return false}}
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function chip(t,sel,cb){var b=document.createElement("button");b.type="button";b.className="chip"+(sel[t]?" on":"");b.textContent=t;b.onclick=function(){sel[t]=!sel[t];b.classList.toggle("on");if(cb)cb();};return b}
+function build(){
+var bd=$("body");BODY.forEach(function(t){bd.appendChild(chip(t,selB,renderNeeds))});
+var em=$("emo");mmBuild();[].forEach(function(f){var h=document.createElement("div");h.className="fam";h.innerHTML=esc(f[0])+"<small>"+esc(f[1])+"</small>";em.appendChild(h);var c=document.createElement("div");c.className="chips";f[2].forEach(function(t){c.appendChild(chip(t,selE,renderActs))});em.appendChild(c)})}
+function tab(n){for(var i=0;i<4;i++){$("v"+i).classList.toggle("hide",i!=n);$("t"+i).classList.toggle("on",i==n)}if(n==1)list();if(n==2)insight();if(n==3)wijzer();window.scrollTo(0,0)}
+function keys(o){return Object.keys(o).filter(function(k){return o[k]})}
+function save(){
+var e=keys(selE),b=keys(selB);
+if(!e.length&&!b.length&&mmQ<0){alert("Kies minstens één lichamelijk gevoel of emotie.");return}
+E.unshift({id:Date.now(),ts:new Date().toISOString(),body:b,emo:e,int:+$("int").value,en:+$("en").value,sit:$("sit").value.trim(),ged:$("ged").value.trim(),nodig:$("nodig").value.trim(),acts:keys(selA).map(function(t){return{t:t,r:null}}),bespreek:$("bespreek").checked,q:mmQ,needs:keys(selN)});var ent=E[0];
+var ok=store();
+selB={};selE={};selA={};selN={};document.querySelectorAll(".chip.on").forEach(function(c){c.classList.remove("on")});
+["sit","ged","nodig"].forEach(function(i){$(i).value=""});$("int").value=5;$("en").value=5;$("iv").textContent=5;$("ev").textContent=5;$("bespreek").checked=false;mmQ=-1;mmBuild();renderActs();showAdv(ent);
+var m=$("msg");m.textContent=ok?"Opgeslagen ✓":"Opgeslagen voor nu, maar je browser laat geen opslag toe.";m.classList.remove("hide");setTimeout(function(){m.classList.add("hide")},3000)}
+function dstr(d){return new Date(d).toLocaleDateString("nl-NL",{weekday:"long",day:"numeric",month:"long"})}
+function tstr(d){return new Date(d).toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"})}
+function list(){
+var L=$("list");if(!E.length){L.innerHTML='<div class="card meta">Nog geen invullingen. Begin bij "Invullen".</div>';return}
+var h="",last="";E.forEach(function(x){var d=dstr(x.ts);if(d!=last){h+='<div class="day">'+esc(d)+"</div>";last=d}
+h+='<div class="card"><div class="meta">'+(x.bespreek?'★ Bespreken · ':'')+qdot(x)+tstr(x.ts)+" · sterkte "+x.int+"/10 · energie "+x.en+"/10</div><div style='margin-top:6px'>"+x.emo.map(function(t){return'<span class="tag">'+esc(t)+"</span>"}).join("")+"</div>";
+if(x.body.length)h+='<div class="meta">Lichaam: '+esc(x.body.join(", "))+"</div>";
+if(x.sit)h+='<p class="q"><b>Gebeurd:</b> '+esc(x.sit)+"</p>";if(x.ged)h+='<p class="q"><b>Gedacht:</b> '+esc(x.ged)+"</p>";if(x.nodig)h+='<p class="q"><b>Nodig:</b> '+esc(x.nodig)+"</p>";
+if(x.needs&&x.needs.length)h+='<p class="q"><b>Nodig (gekozen):</b> '+esc(x.needs.join(', '))+'</p>';if(x.extra)h+='<p class="q"><b>Aanvulling:</b> '+esc(x.extra)+'</p>';if(x.acts&&x.acts.length){h+='<div style="margin-top:8px"><b>Wat ik deed:</b>'+x.acts.map(function(k,i){var b=function(v,l){return'<button class="ghost'+(k.r===v?' sel':'')+'" data-rate="'+x.id+'|'+i+'|'+v+'">'+l+'</button>'};return'<div class="act">'+esc(k.t)+'<div>'+b(2,'👍 Hielp')+b(1,'😐 Beetje')+b(0,'👎 Niet')+'</div></div>'}).join('')+'</div>'}
+h+='<button class="ghost" data-del="'+x.id+'">Verwijder</button></div>'});
+L.innerHTML=h}
+function insight(){
+var I=$("ins");if(!E.length){I.innerHTML='<div class="card meta">Vul eerst een paar keer in, dan zie je hier patronen.</div>';return}
+var r=E.filter(function(x){return Date.now()-new Date(x.ts)<30*864e5});
+function top(f){var c={};r.forEach(function(x){x[f].forEach(function(t){c[t]=(c[t]||0)+1})});return Object.keys(c).map(function(k){return[k,c[k]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,6)}
+function bars(a){var m=a.length?a[0][1]:1;return a.map(function(p){return'<div class="bar"><span>'+esc(p[0])+'</span><i style="width:'+Math.round(p[1]/m*100)+'px;max-width:50%"></i><span class="meta">'+p[1]+"×</span></div>"}).join("")||'<span class="meta">-</span>'}
+var fc={};r.forEach(function(x){x.emo.forEach(function(t){FAM.forEach(function(f){if(f[2].indexOf(t)>-1)fc[f[0]]=(fc[f[0]]||0)+1})})});
+var fa=Object.keys(fc).map(function(k){return[k,fc[k]]}).sort(function(a,b){return b[1]-a[1]});
+var avg=r.length?(r.reduce(function(s,x){return s+x.int},0)/r.length).toFixed(1):"-";
+I.innerHTML=overview(r)+wkCard()+'<div class="card"><b>Laatste 30 dagen</b><p class="meta">'+r.length+" invullingen · gemiddelde sterkte "+avg+'/10</p></div><div class="card"><b>Meest herkende emoties</b>'+bars(top("emo"))+'</div><div class="card"><b>Emotiefamilies</b>'+bars(fa)+'</div><div class="card"><b>Meest genoemde lichaamssignalen</b>'+bars(top("body"))+'</div>'+helpCard()+'<div class="card meta">Tip: kijk eens welke lichaamssignalen bij welke emoties horen. Je lijf geeft vaak eerder een seintje dan je hoofd.</div>'}
+function summary(){
+var r=E.filter(function(x){return Date.now()-new Date(x.ts)<7*864e5});
+if(!r.length)return"Geen invullingen in de afgelopen 7 dagen.";
+var t="Emotiedagboek, afgelopen 7 dagen\n",last="";
+r.slice().reverse().forEach(function(x){var d=dstr(x.ts);if(d!=last){t+="\n"+d.toUpperCase()+"\n";last=d}
+t+=(x.bespreek?"★ ":"")+tstr(x.ts)+" - "+(qOf(x)>-1?"["+MM[qOf(x)].n+"] ":"")+x.emo.join(", ")+" (sterkte "+x.int+"/10, energie "+x.en+"/10)\n";
+if(x.body.length)t+="  Lichaam: "+x.body.join(", ")+"\n";if(x.sit)t+="  Gebeurd: "+x.sit+"\n";if(x.ged)t+="  Gedacht: "+x.ged+"\n";if(x.nodig||(x.needs&&x.needs.length))t+="  Nodig: "+(x.needs||[]).concat(x.nodig?[x.nodig]:[]).join("; ")+"\n";if(x.acts&&x.acts.length)t+="  Gedaan: "+x.acts.map(function(k){return k.t+(k.r===2?" (hielp)":k.r===1?" (beetje)":k.r===0?" (hielp niet)":"")}).join("; ")+"\n"});
+if(WK.length)t+="\nWAT WERKT VOOR MIJ\n"+WK.map(function(w){return"- "+w.t+(w.q>-1?" ("+MM[w.q].n+")":"")}).join("\n")+"\n";if(QS.length)t+="\nVRAGEN EN BESPREEKPUNTEN\n"+QS.map(function(q){return"- "+q}).join("\n")+"\n";return t}
+try{CUSTOM=JSON.parse(localStorage.getItem("emotiedagboek:custom")||"[]")}catch(e){CUSTOM=[]}
+function renderActs(){
+var box=$("acts"),fs=[],s=[];
+FAM.forEach(function(f){if(f[2].some(function(t){return selE[t]}))fs.push(f[0])});
+function add(a){if(s.indexOf(a)<0)s.push(a)}
+fs.forEach(function(n){(ACT[n]||[]).forEach(add)});
+ACT["Algemeen"].forEach(add);CUSTOM.forEach(add);keys(selA).forEach(add);
+$("acthint").textContent=fs.length?"Suggesties bij: "+fs.join(", "):"Kies je emoties hierboven voor passende suggesties.";
+box.innerHTML="";s.forEach(function(t){box.appendChild(chip(t,selA))});renderNeeds()}
+function helpCard(){
+var a={};E.forEach(function(x){(x.acts||[]).forEach(function(k){var o=a[k.t]||(a[k.t]={n:0,h:0,l:0,z:0,u:0});o.n++;if(k.r===2)o.h++;else if(k.r===1)o.l++;else if(k.r===0)o.z++;else o.u++})});
+var ks=Object.keys(a);
+if(!ks.length)return'<div class="card"><b>Wat helpt?</b><p class="meta">Kies acties bij het invullen en geef later aan of ze hielpen. Dan zie je hier wat voor jou werkt.</p></div>';
+ks.sort(function(p,q){return a[q].n-a[p].n});
+return'<div class="card"><b>Wat helpt (en wat niet)?</b>'+ks.map(function(k){var o=a[k];return'<div class="bar" style="flex-wrap:wrap"><span style="width:100%"><b>'+esc(k)+'</b> <span class="meta">'+o.n+'× gedaan</span></span><span class="meta">👍 '+o.h+' · 😐 '+o.l+' · 👎 '+o.z+(o.u?' · nog niet beoordeeld '+o.u:'')+'</span></div>'}).join('')+'</div>'}
+$("addact").onclick=function(){var v=$("custact").value.trim();if(!v)return;if(CUSTOM.indexOf(v)<0){CUSTOM.push(v);try{localStorage.setItem("emotiedagboek:custom",JSON.stringify(CUSTOM))}catch(e){}}selA[v]=true;$("custact").value="";renderActs()};
+var QS=[];try{QS=JSON.parse(localStorage.getItem('emotiedagboek:vragen')||'[]')}catch(e){QS=[]}
+function saveQ(){try{localStorage.setItem('emotiedagboek:vragen',JSON.stringify(QS))}catch(e){}}
+var FI={
+'Verdriet':['Verdriet laat zien dat je iets mist of dat iets je raakt. Bij een depressie voelt het vaak zwaar of vlak, maar je kunt het wel een naam geven.','Benoem wat je mist: een persoon, een plek, een versie van jezelf. Praten met iemand of het gevoel even laten zijn kan het verlichten.','Wat mis ik, en wanneer voelde ik me voor het laatst anders?'],
+'Angst & spanning':['Je lijf staat in alarmstand en maakt zich klaar voor gevaar, ook als er niets gevaarlijks gebeurt. Dit is een lichaamsreactie, geen bewijs dat er iets mis is.','Kalmeer eerst je lijf, denk daarna pas na. Adem langzaam in en langer uit, of benoem 5 dingen die je ziet.','Waar maak ik me precies zorgen over, en wat is de kans dat het gebeurt?'],
+'Boosheid':['Boosheid wijst vaak op een overschreden grens of iets wat oneerlijk voelt. Soms zit er verdriet of pijn onder.','Neem eerst afstand of beweeg, en praat pas als je lijf rustiger is. Vraag jezelf: wat had ik nodig wat ik niet kreeg?','Welke grens werd er overschreden, en kan ik die aangeven?'],
+'Schaamte & schuld':['Bij schaamte oordeel je over jezelf (ik ben fout), bij schuld over wat je deed. Depressie maakt die innerlijke stem vaak harder en overtuigender dan hij is.','Schrijf de gedachte op en vraag: is dit een feit of een gedachte? Wat zou ik zeggen tegen een vriend die dit voelt?','Van wie of waar komt deze stem, en zou ik zo tegen een ander praten?'],
+'Leeg & moe':['Leegte en afgestomptheid komen vaak voor bij depressie. Het kan een teken zijn dat je systeem overbelast is en zichzelf beschermt.','Kies een heel klein stapje van 5 minuten, zoals water drinken of naar buiten gaan. Gevoel en energie komen vaak pas na de actie, niet ervoor.','Wanneer voelde ik me voor het laatst minder leeg, en wat deed ik toen?'],
+'Prettig':['Prettige gevoelens leren herkennen is net zo belangrijk, ook als ze klein of kort zijn.','Blijf er 30 seconden bij stilstaan: waar voel je het in je lijf? Zo onthoudt je brein het beter.','Wat maakte dit moment anders dan de rest van de dag?']};
+var BH={'Strakke borst':'spanning of verdriet','Knoop in maag':'angst of schaamte','Gespannen schouders':'spanning of boosheid','Snelle hartslag':'angst of boosheid','Zwaar gevoel':'verdriet of moeheid','Trillerig':'angst of spanning','Brok in keel':'verdriet','Leeg gevoel':'leegte of verdriet','Warm':'boosheid of schaamte','Koud':'angst of leegte','Misselijk':'angst of spanning','Doodmoe maar onrustig':'spanning'};
+var TL=[['Ademhaling die kalmeert','1. Adem 4 tellen in door je neus. 2. Adem 6 tellen uit door je mond. 3. Herhaal dit 2 tot 5 minuten. Een langere uitademing geeft je lijf het signaal dat het veilig is.'],['Grounding 5-4-3-2-1','Benoem 5 dingen die je ziet, 4 die je voelt (bijvoorbeeld je voeten op de grond), 3 die je hoort, 2 die je ruikt en 1 die je proeft. Dit brengt je terug naar het nu.'],['Een gedachte onderzoeken','1. Schrijf de gedachte op. 2. Is het een feit of een gedachte? 3. Wat spreekt ertegen? 4. Wat zou ik tegen een vriend zeggen? 5. Hoe kan ik het eerlijker en vriendelijker zeggen?'],['Klein stapje zetten','Bij een depressie komt motivatie vaak pas na de actie. Kies iets van 5 minuten: een glas water, douchen, even buiten staan. Doe het, en geef daarna je gevoel een cijfer van 0 tot 10.'],['Een gevoelsmoment uitzoeken','Wat gebeurde er vlak ervoor? Wat merkte ik in mijn lijf? Welk woord past het best? Wat deed ik? Wat wil ik de volgende keer proberen?']];
+function showAdv(x){
+var fs=[],h="";FAM.forEach(function(f){if(f[2].some(function(t){return x.emo.indexOf(t)>-1}))fs.push(f[0])});
+h+="<div class='card adv'><b>Opgeslagen ✓ Wat kun je hiervan leren?</b>";
+if(x.int>=9||x.emo.indexOf('Hopeloos')>-1||x.emo.indexOf('Wanhopig')>-1)h+='<p><b>Dit klinkt zwaar.</b> Zoek nu contact met iemand die je vertrouwt. Heb je gedachten aan zelfmoord, bel dan 113 (0800-0113) in Nederland of 1813 in België. Je hoeft dit niet alleen te dragen.</p>';
+else if(x.int>=7)h+='<p>Dit is een hoge piek. Pieken zakken meestal weer na een tijdje. Doe eerst iets voor je lijf (langzaam uitademen, water drinken, even naar buiten) en praat of denk daarna pas.</p>';
+fs.forEach(function(n){var i=FI[n];h+='<p><b>'+esc(n)+':</b> '+i[0]+'</p><p><b>Je kunt proberen:</b> '+i[1]+'</p>'});
+var bh=x.body.filter(function(b){return BH[b]}).map(function(b){return b+' hoort vaak bij '+BH[b]});
+if(bh.length)h+='<p><b>Je lichaam vertelt iets:</b> '+esc(bh.join('; '))+'. Het is een aanwijzing, geen vast antwoord.</p>';
+if(!x.emo.length)h+='<p>Je koos nog geen emotie. Dat is oké. Kijk later nog eens: welk woord uit de lijst komt het dichtst in de buurt?</p>';
+if(x.en<=2)h+='<p>Je energie is erg laag. Verwacht nu niet te veel van jezelf en kies maximaal één klein ding.</p>';
+if(x.ged)h+='<p><b>Je gedachte onderzoeken:</b> is dit een feit of een gedachte? Wat zou je zeggen tegen een vriend die dit denkt?</p>';
+var hp=[];E.slice(1).forEach(function(y){if(y.emo.some(function(t){return x.emo.indexOf(t)>-1}))(y.acts||[]).forEach(function(k){if(k.r===2&&hp.indexOf(k.t)<0)hp.push(k.t)})});
+if(hp.length)h+='<p><b>Dit hielp jou eerder bij dit gevoel:</b> '+esc(hp.slice(0,3).join('; '))+'.</p>';
+var wq=qOf(x),wk=WK.filter(function(w){return w.q===-1||w.q===wq}).map(function(w){return w.t});if(wk.length)h+='<p><b>Je schreef zelf op dat dit voor jou werkt:</b> '+esc(wk.slice(0,4).join('; '))+'.</p>';
+fs.slice(0,2).forEach(function(n){var q=FI[n][2];h+='<p>Vraag om over na te denken: <i>'+q+'</i> <button class="ghost" data-q="'+esc(q)+'">＋ Op mijn lijst voor de therapeut</button></p>'});
+h+='<button class="ghost" data-close="1">Sluiten</button></div>';
+$('adv').innerHTML=h;window.scrollTo(0,0)}
+function qrender(){$('qbox').innerHTML='<b>Mijn vragen voor de therapeut</b><p class="sub">Schrijf op wat je wilt bespreken. Het komt mee in de samenvatting onder Dagboek.</p>'+(QS.length?'<ul>'+QS.map(function(q,i){return'<li>'+esc(q)+' <button class="ghost" data-qd="'+i+'" style="padding:2px 8px">✕</button></li>'}).join('')+'</ul>':'<p class="meta">Nog geen vragen.</p>')+'<div style="display:flex;gap:8px;margin-top:8px"><input id="qin" type="text" placeholder="Nieuwe vraag of bespreekpunt"><button class="ghost" id="qadd" style="margin:0">Toevoegen</button></div>'}
+function wijzer(){
+var h='<p class="sub">Uitleg en oefeningen zoals een therapeut ze ook zou geven. Het vervangt je therapeut niet: bespreek wat je opvalt met hem of haar.</p>';
+h+=mmCard();h+='<div class="card"><b>Emoties leren herkennen</b>'+FAM.map(function(f){var i=FI[f[0]];return'<details><summary>'+esc(f[0])+'</summary><p>'+i[0]+'</p><p><b>Woorden:</b> '+esc(f[2].join(', '))+'</p><p><b>Je kunt proberen:</b> '+i[1]+'</p><p><b>Vraag aan jezelf:</b> <i>'+i[2]+'</i></p></details>'}).join('')+'</div>';
+h+='<div class="card"><b>Zo praat je over je gevoel</b><p class="sub">In plaats van “ik voel me slecht” kun je zeggen:</p><ul><li>Ik voel me <i>(emotie)</i>, vooral in mijn <i>(lichaamsdeel)</i>.</li><li>Het begon toen <i>(situatie)</i>.</li><li>Op een schaal van 0 tot 10 is het nu een <i>(cijfer)</i>.</li><li>Ik denk dat ik <i>(rust, praten, ruimte)</i> nodig heb.</li></ul></div>';
+h+='<div class="card"><b>Oefeningen</b>'+TL.map(function(t){return'<details><summary>'+t[0]+'</summary><p>'+t[1]+'</p></details>'}).join('')+'</div>';
+h+='<div class="card" id="qbox"></div>';
+$('wijzer').innerHTML=h;qrender()}
+$('adv').onclick=function(e){var q=e.target.getAttribute('data-q');if(q&&QS.indexOf(q)<0){QS.push(q);saveQ();e.target.textContent='Toegevoegd ✓'}if(e.target.getAttribute('data-close'))$('adv').innerHTML=''};
+$('wijzer').onclick=function(e){var t=e.target;if(t.id=='qadd'){var v=$('qin').value.trim();if(v){QS.push(v);saveQ();qrender()}}var d=t.getAttribute('data-qd');if(d!==null){QS.splice(+d,1);saveQ();qrender()}};
+var MM=[
+{n:'Onrustig of boos',s:'Veel energie, vervelend gevoel',c:'#a8456e',tc:'#fff',ex:['Mijn hart gaat snel en ik kan niet stilzitten','Ik pieker of heb een kort lontje','Mijn schouders en kaken zijn gespannen'],w:['Woedend','In paniek','Gestrest','Zenuwachtig','Geschokt','Pissig','Driftig','Gefrustreerd','Gespannen','Verbijsterd','Verbolgen','Bang','Boos','Nerveus','Rusteloos','Angstig','Ongerust','Zorgelijk','Geïrriteerd','Geërgerd','Afkerig','Onrustig','Bezorgd','Ongemakkelijk','Geraakt']},
+{n:'Blij en energiek',s:'Veel energie, prettig gevoel',c:'#d9953f',tc:'#2b2a28',ex:['Ik heb zin om dingen te doen','Ik lach en voel me levendig','Ik kan me goed concentreren en ben gemotiveerd'],w:['Verrast','Vrolijk','Feeststemming','Opgewonden','In extase','Hyper','Opgewekt','Gemotiveerd','Geïnspireerd','Verrukt','Opgeladen','Levendig','Opgetogen','Optimistisch','Enthousiast','Verheugd','Gefocust','Blij','Trots','Ontroerd','Monter','Vreugdevol','Hoopvol','Speels','Gelukkig']},
+{n:'Somber of leeg',s:'Weinig energie, vervelend gevoel',c:'#3f7a68',tc:'#fff',ex:['Alles voelt zwaar en kost moeite','Ik heb nergens zin in of voel weinig','Ik wil me terugtrekken of ben moe zonder reden'],w:['Walgend','Somber','Teleurgesteld','Triest','Apathisch','Pessimistisch','Chagrijnig','Ontmoedigd','Verdrietig','Verveeld','Vervreemd','Ellendig','Eenzaam','Verslagen','Moe','Moedeloos','Depressief','Nors','Uitgeput','Afgemat','Wanhopig','Hopeloos','Troosteloos','Opgebrand','Leeggezogen']},
+{n:'Rustig en tevreden',s:'Weinig energie, prettig gevoel',c:'#c4694f',tc:'#fff',ex:['Mijn lijf is ontspannen en ik adem rustig','Ik voel me veilig en hoef even niets','Ik kan genieten van even niets doen'],w:['Op je gemak','Meegaand','Content','Liefdevol','Vervuld','Kalm','Veilig','Bevredigd','Dankbaar','Bewogen','Ontspannen','Meditatief','Rustig','Gezegend','In evenwicht','Mild','Bedachtzaam','Vredig','Comfortabel','Zorgeloos','Slaperig','Voldaan','Senang','Behaaglijk','Sereen']}];
+var EX=['Beschaamd','Schuldig','Waardeloos','Leeg','Afgestompt','Verdoofd','Lusteloos','Onverschillig'];
+var QW={};MM.forEach(function(m,i){m.w.forEach(function(t){QW[t]=i})});EX.forEach(function(t){QW[t]=2});
+FAM[0][2]=['Geraakt','Teleurgesteld','Triest','Somber','Verdrietig','Ontmoedigd','Ellendig','Eenzaam','Vervreemd','Verslagen','Moedeloos','Wanhopig','Hopeloos','Troosteloos','Pessimistisch'];
+FAM[1][2]=['In paniek','Gestrest','Zenuwachtig','Geschokt','Gespannen','Verbijsterd','Bang','Nerveus','Rusteloos','Angstig','Ongerust','Zorgelijk','Onrustig','Bezorgd','Ongemakkelijk'];
+FAM[2][2]=['Woedend','Pissig','Driftig','Gefrustreerd','Verbolgen','Boos','Geïrriteerd','Geërgerd','Afkerig','Walgend','Chagrijnig','Nors'];
+FAM[3][2]=['Beschaamd','Schuldig','Waardeloos'];
+FAM[4][2]=['Apathisch','Verveeld','Moe','Depressief','Uitgeput','Afgemat','Opgebrand','Leeggezogen','Leeg','Afgestompt','Verdoofd','Lusteloos','Onverschillig'];
+FAM[5][2]=MM[1].w.concat(MM[3].w);
+function qOf(x){var c=[0,0,0,0],b=-1,m=0;(x.emo||[]).forEach(function(t){var q=QW[t];if(q!==undefined)c[q]++});c.forEach(function(v,i){if(v>m){m=v;b=i}});if(b<0&&x.q>-1)b=x.q;return b}
+function qdot(x){var q=qOf(x);return q>-1?'<span style="color:'+MM[q].c+'">● </span>':''}
+var mmQ=-1,lastCell='';
+function mmSel(){var k=keys(selE);$('mmsel').textContent=k.length?'Gekozen: '+k.join(', '):''}
+function mmWords(){var w=$('mmw');w.innerHTML='';if(mmQ<0)return;var m=MM[mmQ],d=document.createElement('div');d.className='card';d.style.borderColor=m.c;d.innerHTML='<b>'+m.n+'</b><p class="sub" style="margin:4px 0">Zo kan het voelen:</p><ul>'+m.ex.map(function(e){return'<li>'+e+'</li>'}).join('')+'</ul><p class="sub">Welke woorden passen? Kies er een of meer. Het hoeft niet precies te kloppen.</p>';var c=document.createElement('div');c.className='chips';m.w.forEach(function(t){c.appendChild(chip(t,selE,function(){renderActs();mmSel()}))});d.appendChild(c);w.appendChild(d)}
+function mmBuild(){var em=$('emo');em.innerHTML='<p class="sub">Tik het vak aan dat het best past. Twijfel je? Kies het vak dat het dichtst in de buurt komt.</p><div class="row" style="margin-bottom:4px"><span>← Vervelend gevoel</span><span>Prettig gevoel →</span></div>';
+var g=document.createElement('div');g.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px';
+MM.forEach(function(m,i){var b=document.createElement('button');b.type='button';b.style.cssText='background:'+m.c+';color:'+m.tc+';border:3px solid '+(i==mmQ?'var(--tx)':'transparent')+';border-radius:12px;padding:12px;text-align:left;font:inherit;font-size:14px';b.innerHTML='<b>'+m.n+'</b><br><small>'+m.s+'</small>';b.onclick=function(){mmQ=i;mmBuild();renderNeeds()};g.appendChild(b)});
+em.appendChild(g);em.insertAdjacentHTML('beforeend','<div id="mmw" style="margin-top:8px"></div><p class="meta" id="mmsel"></p><p class="sub" style="margin-top:12px">Staat jouw gevoel er niet bij?</p>');
+var c=document.createElement('div');c.className='chips';EX.forEach(function(t){c.appendChild(chip(t,selE,function(){renderActs();mmSel()}))});em.appendChild(c);mmWords();mmSel()}
+var DP=['Ochtend','Middag','Avond','Nacht'];
+function dk(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function dpart(d){var h=d.getHours();return h<6?3:h<12?0:h<18?1:2}
+function overview(r){
+var cnt=[0,0,0,0],tot=0;r.forEach(function(x){var q=qOf(x);if(q>-1){cnt[q]++;tot++}});
+var h='<div class="card"><b>Waar zit ik meestal? (30 dagen)</b>';
+MM.forEach(function(m,i){var p=tot?Math.round(cnt[i]/tot*100):0;h+='<div class="bar"><span style="width:150px"><span style="color:'+m.c+'">●</span> '+m.n+'</span><i style="width:'+p+'px;max-width:30%;background:'+m.c+'"></i><span class="meta">'+cnt[i]+'×</span></div>'});
+h+='</div>';
+var days=[],map={};for(var i=0;i<14;i++){var d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);days.push(d)}
+E.forEach(function(x){var d=new Date(x.ts),k=dk(d)+'|'+dpart(d);(map[k]=map[k]||[]).push(x)});
+h+='<div class="card"><b>Wanneer voel ik wat? (14 dagen)</b><p class="sub">Tik op een vakje om te lezen wat je opschreef. Je kunt er later iets aan toevoegen.</p><div style="overflow-x:auto"><table style="border-collapse:separate;border-spacing:3px;width:100%;font-size:12px"><tr><th></th>'+DP.map(function(p){return'<th class="meta">'+p+'</th>'}).join('')+'</tr>';
+days.forEach(function(d){h+='<tr><td class="meta" style="white-space:nowrap">'+d.toLocaleDateString('nl-NL',{weekday:'short',day:'numeric',month:'numeric'})+'</td>';
+for(var p=0;p<4;p++){var k=dk(d)+'|'+p,a=map[k];
+if(a){var x=a[0],q=qOf(x),m=q>-1?MM[q]:null,note=a.some(function(y){return y.sit||y.ged||y.nodig||y.extra});
+h+='<td data-cell="'+k+'" style="background:'+(m?m.c:'#999')+';color:'+(m?m.tc:'#fff')+';border-radius:8px;padding:5px;text-align:center;cursor:pointer;min-width:64px">'+esc(x.emo.slice(0,2).join(', ')||'lichaam')+(a.length>1?' +'+(a.length-1):'')+(note?' ✎':'')+'</td>'}
+else h+='<td style="background:var(--bg);border-radius:8px;min-width:64px">&nbsp;</td>'}
+h+='</tr>'});
+return h+'</table></div><div id="cinfo"></div></div>'}
+function cellInfo(k){var p=k.split('|');
+var a=E.filter(function(x){var d=new Date(x.ts);return dk(d)==p[0]&&dpart(d)==+p[1]});
+$('cinfo').innerHTML=a.map(function(x){var q=qOf(x);
+return'<div style="border-top:1px solid var(--bd);margin-top:10px;padding-top:8px"><div class="meta">'+dstr(x.ts)+' '+tstr(x.ts)+(q>-1?' · '+MM[q].n:'')+' · sterkte '+x.int+'/10</div><div>'+x.emo.map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join('')+'</div>'+(x.body.length?'<div class="meta">Lichaam: '+esc(x.body.join(', '))+'</div>':'')+(x.sit?'<p class="q"><b>Gebeurd:</b> '+esc(x.sit)+'</p>':'')+(x.ged?'<p class="q"><b>Gedacht:</b> '+esc(x.ged)+'</p>':'')+((x.needs&&x.needs.length)||x.nodig?'<p class="q"><b>Nodig:</b> '+esc((x.needs||[]).concat(x.nodig?[x.nodig]:[]).join(', '))+'</p>':'')+'<textarea id="nt'+x.id+'" placeholder="Later aanvullen: wat valt me nu op?" style="min-height:48px;margin-top:6px">'+esc(x.extra||'')+'</textarea><button class="ghost" data-ns="'+x.id+'">Aanvulling opslaan</button></div>'}).join('')}
+function mmCard(){return'<div class="card"><b>De gevoelskaart: waar zit ik?</b><p class="sub">Elk gevoel is te plaatsen met twee vragen: 1) Hoeveel energie voel ik in mijn lijf, veel of weinig? 2) Voelt het prettig of vervelend? Dat geeft vier vakken:</p>'+MM.map(function(m){return'<div style="border-left:6px solid '+m.c+';padding:2px 10px;margin:12px 0"><b>'+m.n+'</b> <span class="meta">'+m.s+'</span><ul>'+m.ex.map(function(e){return'<li>'+e+'</li>'}).join('')+'</ul><span class="meta">Voorbeeldwoorden: '+esc(m.w.slice(0,8).join(', '))+'</span></div>'}).join('')+'<p class="sub">Bij een depressie voelt veel vlak of zwaar. Dan is Somber of leeg vaak het best herkenbaar. Je gevoel kan ook wisselen binnen een dag. Dat is normaal en goed om met je therapeut te bespreken.</p></div>'}
+$('ins').onclick=function(e){var t=e.target;if(t.getAttribute('data-wa')!==null){var v=$('wkin').value.trim();if(v){WK.push({t:v,q:+$('wkq').value});saveWK();insight()}return}if(t.getAttribute('data-wd')!==null){WK.splice(+t.getAttribute('data-wd'),1);saveWK();insight();return}var c=e.target.closest('[data-cell]');if(c){lastCell=c.getAttribute('data-cell');cellInfo(lastCell)}var s=e.target.getAttribute('data-ns');if(s){var ta=$('nt'+s);E.forEach(function(x){if(String(x.id)===s)x.extra=ta.value.trim()});store();cellInfo(lastCell)}};
+var selN={},WK=[];try{WK=JSON.parse(localStorage.getItem('emotiedagboek:werkt')||'[]')}catch(e){WK=[]}
+function saveWK(){try{localStorage.setItem('emotiedagboek:werkt',JSON.stringify(WK))}catch(e){}}
+var ND=[
+['Mijn lijf kalmeren (langzaam uitademen)','Even weg uit de situatie','Bewegen om spanning kwijt te raken','Iemand die luistert zonder oplossingen','Minder prikkels en rust','Alles even opschrijven'],
+['Mijn energie ergens in stoppen','Dit delen met iemand','Dit moment vastleggen','Niet te veel tegelijk doen'],
+['Rust, zonder schuldgevoel','Warmte en troost (thee, deken, warme douche)','Iemand in mijn buurt','Een heel klein stapje','Begrip en gezien worden','Frisse lucht'],
+['Dit rustige moment vasthouden','Genieten zonder iets te hoeven','Iets liefs voor mezelf doen','Contact met iemand']];
+function needList(){
+var e=keys(selE),b=keys(selB),c=[0,0,0,0],best=-1,m=0;
+e.forEach(function(t){if(QW[t]!==undefined)c[QW[t]]++});c.forEach(function(v,i){if(v>m){m=v;best=i}});if(best<0)best=mmQ;
+var l=best>-1?ND[best].slice():[];
+function add(t){if(l.indexOf(t)<0)l.push(t)}
+if(+$('int').value>=7)add('Veiligheid en iemand die bij me is');
+if(+$('en').value<=2)add('Weinig van mezelf verwachten');
+if(e.some(function(t){return ['Eenzaam','Vervreemd'].indexOf(t)>-1}))add('Contact met iemand');
+if(e.some(function(t){return ['Moe','Uitgeput','Opgebrand','Afgemat','Leeggezogen'].indexOf(t)>-1}))add('Slaap of echte rust');
+if(e.some(function(t){return ['Beschaamd','Schuldig','Waardeloos'].indexOf(t)>-1}))add('Vriendelijke woorden voor mezelf');
+if(b.some(function(t){return ['Hoofdpijn','Misselijk'].indexOf(t)>-1}))add('Water, eten of rust voor mijn lijf');
+if(b.indexOf('Koud')>-1)add('Warmte');
+if($('ged').value.trim())add('Mijn gedachte op een rijtje zetten');
+keys(selN).forEach(add);return l}
+function renderNeeds(){var box=$('needs');if(!box)return;var l=needList();
+$('needhint').textContent=l.length?'Op basis van wat je invulde, heb je misschien nodig (tik aan wat past):':'Vul hierboven eerst in waar je zit. Dan verschijnen hier ideeen over wat je nu nodig kunt hebben.';
+box.innerHTML='';l.forEach(function(t){box.appendChild(chip(t,selN))})}
+$('ged').oninput=renderNeeds;
+function wkCard(){
+var h='<div class="card"><b>Wat werkt voor mij?</b><p class="sub">Dit wordt vanzelf verzameld uit wat je met 👍 beoordeelde en uit wat je vaak nodig had. Je kunt er zelf dingen aan toevoegen om later terug te lezen.</p>';
+var sec=function(i){var m=i>-1?MM[i]:null,a={},nd={};
+if(m)E.forEach(function(x){if(qOf(x)!==i)return;(x.acts||[]).forEach(function(k){if(k.r===2)a[k.t]=(a[k.t]||0)+1});(x.needs||[]).forEach(function(t){nd[t]=(nd[t]||0)+1})});
+var au=Object.keys(a).sort(function(p,q){return a[q]-a[p]}).slice(0,5),nn=Object.keys(nd).sort(function(p,q){return nd[q]-nd[p]}).slice(0,4);
+var own=[];WK.forEach(function(w,j){if(w.q===i)own.push([w,j])});
+if(!au.length&&!own.length&&!nn.length)return'';
+return'<div style="border-left:6px solid '+(m?m.c:'var(--bd)')+';padding:2px 10px;margin:12px 0"><b>'+(m?'Bij '+m.n:'Algemeen')+'</b>'+(nn.length?'<div class="meta">Vaak nodig: '+esc(nn.join(', '))+'</div>':'')+'<ul>'+au.map(function(t){return'<li>'+esc(t)+' <span class="meta">👍 '+a[t]+'×</span></li>'}).join('')+own.map(function(o){return'<li>'+esc(o[0].t)+' <span class="meta">(eigen)</span> <button class="ghost" data-wd="'+o[1]+'" style="padding:2px 8px">✕</button></li>'}).join('')+'</ul></div>'};
+var s=sec(-1)+MM.map(function(m,i){return sec(i)}).join('');
+h+=s||'<p class="meta">Nog niets verzameld. Beoordeel acties in je Dagboek met 👍 als ze hielpen, of voeg zelf iets toe.</p>';
+h+='<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><input id="wkin" type="text" placeholder="Dit werkt voor mij: ..." style="flex:1;min-width:160px;padding:9px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;font-size:15px"><select id="wkq" style="padding:9px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;font-size:14px"><option value="-1">Algemeen</option>'+MM.map(function(m,i){return'<option value="'+i+'">'+m.n+'</option>'}).join('')+'</select><button class="ghost" data-wa="1" style="margin:0">Toevoegen</button></div></div>';
+return h}
+for(var i=0;i<4;i++)(function(n){$("t"+n).onclick=function(){tab(n)}})(i);
+$("int").oninput=function(){$("iv").textContent=this.value;renderNeeds()};$("en").oninput=function(){$("ev").textContent=this.value;renderNeeds()};
+$("save").onclick=save;
+$("list").onclick=function(e){var rt=e.target.getAttribute("data-rate");if(rt){var p=rt.split("|");E.forEach(function(x){if(String(x.id)===p[0]&&x.acts&&x.acts[+p[1]])x.acts[+p[1]].r=+p[2]});store();list();return}var id=e.target.getAttribute("data-del");if(id&&confirm("Deze invulling verwijderen?")){E=E.filter(function(x){return String(x.id)!==id});store();list()}};
+$("exp").onclick=function(){var o=$("out");o.value=summary();o.classList.remove("hide")};
+$("cp").onclick=function(){var o=$("out");o.value=summary();o.classList.remove("hide");o.select();try{navigator.clipboard.writeText(o.value)}catch(e){try{document.execCommand("copy")}catch(e2){}}$("cp").textContent="Gekopieerd ✓"};
+load();build();renderActs();
+</script>
+</body>
+</html>
